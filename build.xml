@@ -292,7 +292,6 @@
 	
 	<target name="dist.init">
 		<antcall target="init" />
-		<antcall target="rdl-all" />
 		<antcall target="dumpload-all" />
 		
 		<stopwatch name="pcom-all" />
