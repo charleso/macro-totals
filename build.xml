@@ -2,7 +2,6 @@
 
 	<import file="macros.xml" />
 	<property name="ji_jai.root.dir" value="../.." />
-	<import file="../../antCommonImpl/AntCommonScripts/ivy-common.xml" />
 	<property name="trace.level" value="0" />
 	<property name="batch.range" value="1000" />
 	<property name="ellipsej.threads" value="1" />
@@ -162,6 +161,53 @@
 		<exclude name="**/msf*pd.ddf" />
 	</fileset>
 	
+    <target name="totals">
+        <count total="total-before">
+            <fileset dir="${base}/src/0" includes="**/mss*.cbl,**/mso*.cbl,**/msk*.cbl" />
+        </count>
+        <count total="macro-before">
+            <fileset dir="${base}/macro" includes="*.mac" />
+        </count>
+        
+        <!--
+        <antcall target="all.init" />
+        -->
+    
+        <count total="total-after">
+            <fileset dir="${base}/src/0" includes="${workspace}/online/build/**/*.cob" />
+        </count>
+        <count total="macro-after">
+            <fileset dir="${base}/macro" includes="*.mac" />
+        </count>
+        <property name="totals" value="${env.BUILD_NUMBER},${total-before},${total-after},${macro-before},${macro-after}" />
+        <echo message="${totals}" />
+        <echo message="${totals}${line.separator}" file="${workspace}/../totals.csv" append="true" />
+    </target>
+    
+    <macrodef name="count">
+        <attribute name="total" />
+        <element name="files" implicit="yes"/>
+        <sequential>
+            <property name="@{total}" value="0" />
+            <concat>
+                <files />
+                <filterchain>
+                    <tokenfilter>
+                        <countfilter property="@{total}" init="${@{total}}" override="true" />
+                    </tokenfilter>
+                    <stopfilter />
+                </filterchain>
+            </concat>
+        </sequential>
+    </macrodef>
+    
+    <typedef name="countfilter"
+         classname="net.sf.antcount.filters.CountFilter"
+         classpath="antcount.jar" />
+    <typedef name="stopfilter"
+         classname="net.sf.antcount.filters.StopFilter"
+         classpath="antcount.jar" />
+    
 	<target name="all.init">
 		<delete dir="${dist}" />
 		<delete file="${check}" />
@@ -185,6 +231,17 @@
 		<ivy:retrieve organisation="mincom" module="MincomNacaTrans" revision="${infrastructure.version}" inline="true" pattern="${lib.dir}/[artifact].[type]" />
 		<ivy:retrieve organisation="mincom" module="ejp" revision="${infrastructure.version}" inline="true" pattern="${lib.dir}/[artifact].[type]" conf="default,j2ee" />
 		
+        <mkdir dir="${ji_jai}/ellipseJImpl/EllipseBuild/macro" />
+        <java classname="com.mincom.ellipse.ejp.macro.MacroReplace" fork="true" maxmemory="${javac.memory}">
+            <classpath>
+                <fileset dir="${lib.dir}/">
+                    <include name="**/*.jar"/>
+                </fileset>
+            </classpath>
+            <arg value="${ji_jai}/ellipseJImpl/EllipseBuild/macro"/>
+            <arg value="${base}/macro"/>
+        </java>
+        
 		<!-- generate index for generated dictionary -->
 		<ddix.2 dir="${datdct}" />
 		<antcall target="genaudit"/>
