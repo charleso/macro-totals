@@ -188,18 +188,7 @@
 		<!-- generate index for generated dictionary -->
 		<ddix.2 dir="${datdct}" />
 		<antcall target="genaudit"/>
-		
-		<if>
-			<equals arg1="${ellipsej.parallel}" arg2="false" />
-			<then>
-				<property name="ellipsej.process.thread" value="1" />
-			</then>	
-			<else>
-				<property name="ellipsej.process.thread" value="3" />
-			</else>
-		</if>
-		
-		<parallel threadCount="${ellipsej.process.thread}">
+
 			<antcall target="dist.init">
 				<param name="ellipse-name" value="ellipsej-online" />
 				<param name="cobol.fileset" value="ellipse.all" />
@@ -208,28 +197,6 @@
 				<param name="build" value="${workspace}/online/build" />
 				<param name="copylib" value="${workspace}/online/copylib" />
 			</antcall>
-			
-			<antcall target="dist.init">
-				<param name="ellipse-name" value="ellipsej-batch" />
-				<param name="cobol.fileset" value="ellipse.batch" />
-				<param name="batch" value="true" />
-				<param name="src" value="${workspace}/batch/src" />
-				<param name="bin" value="${workspace}/batch/bin" />
-				<param name="build" value="${workspace}/batch/build" />
-				<param name="copylib" value="${workspace}/batch/copylib" />
-			</antcall>
-			
-			<if><equals arg1="${ellipsej.conversion}" arg2="true"/><then>
-			<antcall target="dist.init">
-				<param name="ellipse-name" value="ellipsej-conversion" />
-				<param name="cobol.fileset" value="ellipse.conversion" />
-				<param name="src" value="${workspace}/conversion/src" />
-				<param name="bin" value="${workspace}/conversion/bin" />
-				<param name="build" value="${workspace}/conversion/build" />
-				<param name="copylib" value="${workspace}/conversion/copylib" />
-			</antcall>
-			</then></if>
-		</parallel>
 	</target>
 	<target name="all">
 		<if>
