@@ -297,10 +297,6 @@
 		<stopwatch name="pcom-all" />
 		<antcall target="pcom-all" />
 		<stopwatch name="pcom-all" action="total" />
-		
-		<stopwatch name="copyprops" />
-		<copyprops/>
-		<stopwatch name="copyprops" action="total" />
 	</target>
 	<target name="dist">	
 		<antcall target="exit.remover" />
