@@ -6,14 +6,15 @@
         <count total="total-before">
             <fileset dir="${base}/src" includes="**/mss*.cbl,**/mso*.cbl,**/msk*.cbl" />
         </count>
-        <!-- Hard coded for now" -->
-        <property name="macro-before" value="317556" />
+        <count total="macro-before">
+            <fileset dir="${base}/macro" includes="*.mac" />
+        </count>
     
         <count total="total-after">
             <fileset dir="${workspace}/online/build" includes="**/*.cob" />
         </count>
         <count total="macro-after">
-            <fileset dir="${base}/macro" includes="*.mac" />
+            <fileset dir="${workspace}/ji_jai/ellipseJImpl/EllipseBuild/macro2" includes="*.mac" />
         </count>
         <property name="totals" value="${env.BUILD_NUMBER},${total-before},${total-after},${macro-before},${macro-after}" />
         <echo message="${totals}" />
