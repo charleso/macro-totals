@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        addChart('LOC', 1)
+        addChart('MAC', 3)
+      }
+      
+      function addChart(t, offset) {
+        $('body').append('<div id="' + t + '" />')
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Build');
+        data.addColumn('number', t +' Before');
+        data.addColumn('number', t +' After');
+        $.get('totals.csv', function(data2) {
+            var rows = data2.split('\n')
+            data.addRows(rows.length);
+            for (var i = 0; i < rows.length; i++) {
+                var values = rows[i].split(',')
+                if (values.length == 1) break;
+                data.setValue(i, 0, values[0])	
+                for (var j = 0; j < 2; j++) {
+                    data.setValue(i, j + 1, parseInt(values[offset + j]))
+                }
+            }
+            var chart = new google.visualization.LineChart(document.getElementById(t));
+            chart.draw(data, {width: 400, height: 240, title: t + ' Reduction'});
+        })
+      }
+    </script>
+  </head>
+
+  <body>
+  </body>
+</html>
