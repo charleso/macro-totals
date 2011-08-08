@@ -7,7 +7,7 @@
             <fileset dir="${base}/src" includes="**/mss*.cbl,**/mso*.cbl,**/msk*.cbl" />
         </count>
         <!-- Hard coded for now" -->
-        <property name="macro-before" value="317505" />
+        <property name="macro-before" value="317556" />
     
         <count total="total-after">
             <fileset dir="${workspace}/online/build" includes="**/*.cob" />
