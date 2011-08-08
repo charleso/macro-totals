@@ -18,6 +18,7 @@
         <property name="totals" value="${env.BUILD_NUMBER},${total-before},${total-after},${macro-before},${macro-after}" />
         <echo message="${totals}" />
         <echo message="${totals}${line.separator}" file="${basedir}/../totals.csv" append="true" />
+        <copy todir="${basedir}" file="${basedir}/../totals.csv" />
     </target>
     
     <macrodef name="count">
