@@ -7,7 +7,7 @@
             <fileset dir="${base}/src" includes="**/mss*.cbl,**/mso*.cbl,**/msk*.cbl" />
         </count>
         <count total="batch-before">
-            <fileset dir="${base}/src" excludes="**/mss*.cbl,**/mso*.cbl,**/msk*.cbl" />
+            <fileset dir="${base}/src" excludes="**/mss*.cbl,**/mso*.cbl,**/msk*.cbl,**/msc*.cbl,**/dd*.cbl" />
         </count>
         <count total="macro-before">
             <fileset dir="${base}/macro" includes="*.mac" />
