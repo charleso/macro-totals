@@ -6,6 +6,9 @@
         <count total="total-before">
             <fileset dir="${base}/src" includes="**/mss*.cbl,**/mso*.cbl,**/msk*.cbl" />
         </count>
+        <count total="batch-before">
+            <fileset dir="${base}/src" excludes="**/mss*.cbl,**/mso*.cbl,**/msk*.cbl" />
+        </count>
         <count total="macro-before">
             <fileset dir="${base}/macro" includes="*.mac" />
         </count>
@@ -13,10 +16,13 @@
         <count total="total-after">
             <fileset dir="${workspace}/online/build" includes="**/*.cob" />
         </count>
+        <count total="batch-after">
+            <fileset dir="${workspace}/batch/build" includes="**/*.cob" />
+        </count>
         <count total="macro-after">
             <fileset dir="${workspace}/ji_jai/ellipseJImpl/EllipseBuild/macro2" includes="*.mac" />
         </count>
-        <property name="totals" value="${env.BUILD_NUMBER},${total-before},${total-after},${macro-before},${macro-after}" />
+        <property name="totals" value="${env.BUILD_NUMBER},${total-before},${total-after},${macro-before},${macro-after},${batch-before},${batch-after}" />
         <echo message="${totals}" />
         <echo message="${totals}${line.separator}" file="${basedir}/../totals.csv" append="true" />
         <copy todir="${basedir}" file="${basedir}/../totals.csv" />
