@@ -2,17 +2,48 @@
   <head>
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    <style>
+    .reset {
+        clear: both;
+    }
+    .chart {
+        float: left;
+    }
+    .percent {
+        float: left;
+        font-size: 500%;
+        position: relative;
+        top: 60px;
+        left: 100px;
+    }
+    .Online {
+        color: #dc3912
+    }
+    .Batch {
+        color: #3366cc
+    }
+    </style>
     <script type="text/javascript">
       google.load("visualization", "1", {packages:["corechart"]});
       google.setOnLoadCallback(drawChart);
       function drawChart() {
-        addChart('Online', 1)
-        addChart('Batch', 5)
-        addChart('Macro', 3)
+        addChartWithPercent('Online', 1)
+        addChartWithPercent('Batch', 5)
+        addChart('Macro', 3, function(){})
       }
       
-      function addChart(t, offset) {
-        $('body').append('<div id="' + t + '" />')
+      function addChartWithPercent(t, offset) {
+        addChart(t, offset, function(first, last) {
+            var id = t + '-percent'
+            $('body').append('<div class="percent ' + t + '" id="' + id +'" />')
+            var orig = first[offset + 1]
+            var percent = (orig - last[offset + 1])/(orig - last[offset])
+            $('#' + id).html(Math.ceil(percent * 100) + "%")
+        })
+      }
+      
+      function addChart(t, offset, callback) {
+        $('body').append('<div class="chart" id="' + t + '" />')
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'Build');
         data.addColumn('number', t +' Before');
@@ -20,8 +51,10 @@
         $.get('totals.csv', function(data2) {
             var rows = data2.split('\n')
             data.addRows(rows.length);
+            var first = null
             for (var i = 0; i < rows.length; i++) {
                 var values = rows[i].split(',')
+                first = first || values
                 if (values.length == 1) break;
                 data.setValue(i, 0, values[0])	
                 for (var j = 0; j < 2; j++) {
@@ -30,6 +63,8 @@
             }
             var chart = new google.visualization.LineChart(document.getElementById(t));
             chart.draw(data, {width: 400, height: 240, title: t + ' Reduction'});
+            callback(first, values)
+            $('body').append('<div class="reset" />')
         })
       }
     </script>
