@@ -54,9 +54,9 @@
             data.addRows(rows.length);
             var first = null
             for (var i = 0; i < rows.length; i++) {
+                if (rows[i].length == 0) break;
                 var values = rows[i].split(',')
                 first = first || values
-                if (values.length == 1) break;
                 data.setValue(i, 0, values[0])	
                 for (var j = 0; j < 2; j++) {
                     data.setValue(i, j + 1, parseInt(values[offset + j]))
