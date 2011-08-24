@@ -39,16 +39,17 @@
             var orig = first[offset + 1]
             var percent = (orig - last[offset + 1])/(orig - last[offset])
             $('#' + id).html(Math.ceil(percent * 100) + "%")
+            $('body').append('<div class="reset" />')
         })
       }
       
       function addChart(t, offset, callback) {
-        $('body').append('<div class="chart" id="' + t + '" />')
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'Build');
         data.addColumn('number', t +' Before');
         data.addColumn('number', t +' After');
         $.get('totals.csv', function(data2) {
+            $('body').append('<div class="chart" id="' + t + '" />')
             var rows = data2.split('\n')
             data.addRows(rows.length);
             var first = null
@@ -64,7 +65,6 @@
             var chart = new google.visualization.LineChart(document.getElementById(t));
             chart.draw(data, {width: 400, height: 240, title: t + ' Reduction'});
             callback(first, values)
-            $('body').append('<div class="reset" />')
         })
       }
     </script>
